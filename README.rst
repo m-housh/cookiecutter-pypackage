@@ -2,6 +2,11 @@
 Cookiecutter PyPackage
 ======================
 
+This is my version of python cookiecutter pypackage.
+
+Original README
+---------------
+
 .. image:: https://pyup.io/repos/github/audreyr/cookiecutter-pypackage/shield.svg
      :target: https://pyup.io/repos/github/audreyr/cookiecutter-pypackage/
      :alt: Updates
