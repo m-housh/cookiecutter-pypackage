@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
+from setuptools import setup, findpackages
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -17,7 +17,17 @@ requirements = [
 ]
 
 test_requirements = [
+    {% if cookiecutter.use_pytest == 'y' -%}
+    'pytest>=2.9.2',
+    'pytest-cov>=2.2.1',
+    {%- endif %}
     # TODO: put package test requirements here
+]
+
+setup_requirements = [
+    {% if cookiecutter.use_pytest == 'y' -%}
+    'pytest-runner>=2.9',
+    {%- endif %}
 ]
 
 {%- set license_classifiers = {
@@ -36,9 +46,7 @@ setup(
     author="{{ cookiecutter.full_name.replace('\"', '\\\"') }}",
     author_email='{{ cookiecutter.email }}',
     url='https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}',
-    packages=[
-        '{{ cookiecutter.project_slug }}',
-    ],
+    packages=findpackages(),
     package_dir={'{{ cookiecutter.project_slug }}':
                  '{{ cookiecutter.project_slug }}'},
     {%- if 'no' not in cookiecutter.command_line_interface|lower %}
@@ -50,6 +58,7 @@ setup(
     {%- endif %}
     include_package_data=True,
     install_requires=requirements,
+    setup_requires=setup_requirements,
 {%- if cookiecutter.open_source_license in license_classifiers %}
     license="{{ cookiecutter.open_source_license }}",
 {%- endif %}
@@ -70,6 +79,6 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-    test_suite='tests',
+    test_suite='{{ cookiecutter.project_slug }}/tests',
     tests_require=test_requirements
 )

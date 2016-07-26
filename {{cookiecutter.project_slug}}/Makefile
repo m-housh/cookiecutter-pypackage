@@ -1,4 +1,4 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: activate clean clean-test clean-pyc clean-build deactivate docs help
 .DEFAULT_GOAL := help
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
@@ -28,6 +28,11 @@ help:
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
+activate: ## activate a pyenv virtualenv
+	! [ -d "$$HOME/.pyenv/versions/{{ cookiecutter.project_slug }}" ] && \
+		pyenv virtualenv {{ cookiecutter.project_slug }} && \
+		pyenv local {{ cookiecutter.project_slug }} || \
+		pyenv local {{ cookiecutter.project_slug }}
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -47,17 +52,20 @@ clean-test: ## remove test and coverage artifacts
 	rm -f .coverage
 	rm -fr htmlcov/
 
+deactivate: ## deactivate the virutal env
+	pyenv local --unset
+
 lint: ## check style with flake8
 	flake8 {{ cookiecutter.project_slug }} tests
 
-test: ## run tests quickly with the default Python
+test: activate  ## run tests quickly with the default Python
 	{% if cookiecutter.use_pytest == 'y' -%}
 		py.test
 	{% else %}
 		python setup.py test
 	{%- endif %}
 
-test-all: ## run tests on every Python version with tox
+test-all: deactivate  ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
