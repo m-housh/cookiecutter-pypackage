@@ -26,7 +26,7 @@ test_requirements = [
 
 setup_requirements = [
     {% if cookiecutter.use_pytest == 'y' -%}
-    'pytest-runner>=2.9',
+    'pytest-runner',
     {%- endif %}
 ]
 
@@ -79,6 +79,6 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-    test_suite='{{ cookiecutter.project_slug }}/tests',
+    test_suite='{{ cookiecutter.project_slug }}/test',
     tests_require=test_requirements
 )
